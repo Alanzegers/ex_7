@@ -4,6 +4,7 @@
 
 ### Exercise 7 Greenest city of the Netherlands
 
+### library's 	#need to be up to date!
 library(sp)
 library(rgdal)
 library(rgeos)

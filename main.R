@@ -8,10 +8,11 @@ library(sp)
 library(rgdal)
 library(rgeos)
 library(raster)
-if(!require(leaflet)) {
-	install.packages("leaflet")
-}
-library(leaflet)
+	#if(!require(leaflet)) {
+	#install.packages("leaflet")
+#}
+	#library(leaflet)
+
 ### Download and unzip files
 download.file(url = 'https://github.com/GeoScripting-WUR/VectorRaster/raw/gh-pages/data/MODIS.zip', destfile = 'data/modis.zip', method = 'wget')
 unzip('data/modis.zip', overwrite = TRUE, exdir = 'data/')
@@ -38,27 +39,29 @@ ExtractAug <- extract(NDVIAug, Lvl2Contour, df=TRUE, fun=mean)
 Extractavg <- extract(NDVIavg, Lvl2Contour, df=TRUE, fun=mean)
 plot(Extractavg)
 ##Find cities
-#january
+	#january
 MaxJan <- subset(ExtractJan, ExtractJan$January == max(ExtractJan$January, na.rm = TRUE))
 IDfind <- subset(Lvl2Contour, Lvl2Contour$ID_2 == MaxJan[,1])
 city_january <- IDfind$NAME_2
-#augustus
+	#augustus
 MaxAug <- subset(ExtractAug, ExtractAug$August == max(ExtractAug$August, na.rm = TRUE))
 IDfind2 <- subset(Lvl2Contour, Lvl2Contour$ID_2 == MaxAug[,1])
 city_august <- IDfind2$NAME_2
-#average
+	#average
 Maxavg <- subset(Extractavg, Extractavg$layer == max(Extractavg$layer, na.rm = TRUE))
 IDfind3 <- subset(Lvl2Contour, Lvl2Contour$ID_2 == Maxavg[,1])
 city_average <- IDfind3$NAME_2
+
+### Plot
+plot(NDVIavg, main = paste("January greenest city:",city_january,"(red)",'\n',
+													 "August:", city_august,"(blue)",'\n',
+													 "Overall:", city_average,"(white)"))
+plot(IDfind, col='red', add=T)
+plot(IDfind2, col='blue',add=T)
+plot(IDfind3, col='white',add=T)
 
 ### print city name
 paste("The greenest city in January is" ,city_january,
 			", The greenest city in August is", city_august, 
 			", The greenest city overall is", city_average)
-### Plot
-plot(NDVIavg, main = paste("january greenest city:",city_january,
-													 ", August:", city_august, 
-													 ", overall:", city_average))
-plot(IDfind,  add=T)
-plot(IDfind2, add=T)
-plot(IDfind3, add=T)
+
